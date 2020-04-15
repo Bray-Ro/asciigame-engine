@@ -4,30 +4,55 @@ namespace ascigame
 {
     class engine
     {
-        public void startup()
-        {
-            Console.Clear();
-            Console.WriteLine(" Powered by ");
-            Console.WriteLine("  +--------+");
-            Console.WriteLine(" /         /|");
-            Console.WriteLine("/         / |");
-            Console.WriteLine("+--------+  |");
-            Console.WriteLine("|        |  |");
-            Console.WriteLine("|ascigame| +");
-            Console.WriteLine("|        | /");
-            Console.WriteLine("|        |/");
-            Console.WriteLine("+--------+");
-            Thread.Sleep(1000);
-            Console.Clear();
-        }
-        
-        int playerX = 5;
-        int playerY = 5;
+        static int playerX = 5;
+        static int playerY = 5;
         static bool ifmap = false;
+        static bool ifplayer = false;
         static string maincolor;
         static string map1;
         static string map1stats;
         static bool ifstartup = true;
+        static int columbs = 66;
+        static string[] map1infoarr = {"000", "000"};
+        static string[] map1Arr = { "000", "000" };
+        static int lines = 18;
+        static int Previouse_cursor_x;
+        static int Previouse_cursor_y;
+        public void startup()
+        {
+            
+            Console.Title = "Unnamed asciigame project";
+            Console.Clear();
+            Console.WriteLine(" Powered by ");
+            Console.WriteLine("   +---------+");
+            Console.WriteLine("  /         /|");
+            Console.WriteLine(" /         / |");
+            Console.WriteLine("+---------+  |");
+            Console.WriteLine("|         |  |");
+            Console.WriteLine("|asciigame|  +");
+            Console.WriteLine("|         | /");
+            Console.WriteLine("|         |/");
+            Console.WriteLine("+---------+");
+            Thread.Sleep(1000);
+
+
+        }
+        public void clear()
+        {
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+
+            Console.WriteLine("______________________________________________________________________________");
+            Console.Clear();
+        }
+        public void setTitle(string title)
+        {
+            Console.Title = title;
+        }
         public void Getmap(string mapfile, string mapInfo)
         {
             if (ifstartup == true)
@@ -35,44 +60,70 @@ namespace ascigame
                 startup();
                 ifstartup = false;
             }
-            
+
             map1 = System.IO.File.ReadAllText(mapfile);
             map1stats = System.IO.File.ReadAllText(mapInfo);
-            
-            
-            
+            //split the map info into an array 
+            map1infoarr = map1stats.Split(',');
+
+            //get the amount of columbs in the map
+            columbs = int.Parse(map1infoarr[0]);
+            //This will get the amount of lines from the map info
+            lines = int.Parse(map1infoarr[1]);
+
+
+
         }
-  
-        static string[] map1infoarr;
-        static string[] map1Arr;
+
+
+
         //this function draws the map after the Getmap function is called
         public void Draw_map()
         {
+            
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+
+            Console.WriteLine("______________________________________________________________________________");
+            Console.Clear();
+
+            Console.SetCursorPosition(0, 0);
+            if (maincolor == "red")
+            {
+                Console.BackgroundColor = ConsoleColor.Red;
+                
+            }
             if (ifstartup == true)
             {
                 startup();
                 ifstartup = false;
             }
-            ifmap = true;
-            //split the map info into an array 
-            map1infoarr = map1stats.Split(',');
-            //get the amount of columbs in the map
-            int columbs = int.Parse(map1infoarr[0]);
             
+            
+            ifmap = true;
+
+
 
             //for drawing things get the cursor coordinates before they are moved
-            int Previouse_cursor_x = Console.CursorLeft;
-            int Previouse_cursor_y = Console.CursorTop;
+             Previouse_cursor_x = Console.CursorLeft;
+             Previouse_cursor_y = Console.CursorTop;
+            
             //split the map into an array for example *|*|* will turn into ["*", "*", "*"]
             map1Arr = map1.Split('|');
-            //This will get the amount of lines from the map info
-            int lines = int.Parse(map1infoarr[1]); ;
+
             
             int line = 0;
+
             int columb = 0;
             int i = 0;
+            Console.SetCursorPosition(0, 0);
+      
             //go through and draw the map
-            while (columb <= columbs && line <= lines)
+            while (columb < columbs && line < lines)
             {
 
                 
@@ -99,8 +150,20 @@ namespace ascigame
                         Console.BackgroundColor = ConsoleColor.DarkRed;
                         Console.ForegroundColor = ConsoleColor.DarkRed;
                     }
-                    //write the charecter
-                    Console.Write(current_char);
+                    int x = Console.CursorLeft;
+                    int y = Console.CursorTop;
+                    if (x == playerX && y == playerY)
+                    {
+                        Console.BackgroundColor = ConsoleColor.Blue;
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.Write("@");
+                    }
+                    else
+                    {
+
+                        //write the charecter
+                        Console.Write(current_char);
+                    }
                     //go to next columb
                     columb++;
                 }
@@ -110,15 +173,13 @@ namespace ascigame
                 if (columb == columbs && line < lines)
                 {
                     line++;
-                  
+                    Console.CursorLeft = 0;
+                    
                     columb = 0;
                
                
                 }
-                if (columb == columbs && line == lines)
-                {
-                    Console.SetCursorPosition(Previouse_cursor_x, Previouse_cursor_y);
-                }
+
                 
             }
 
@@ -142,9 +203,21 @@ namespace ascigame
         }
         public void DrawPlayer(int x, int y)
         {
-
+            
+            ifplayer = true;
             Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.Green;
+            
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+
+            Console.WriteLine("______________________________________________________________________________");
             Console.Clear();
+
+
+   
             if (maincolor == "red")
             {
                 Console.BackgroundColor = ConsoleColor.Red;
@@ -165,14 +238,58 @@ namespace ascigame
             Console.BackgroundColor = ConsoleColor.Blue;
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.SetCursorPosition(playerX, playerY);
-            Console.Write(" ");
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.Black;
+          
+            Console.BackgroundColor = ConsoleColor.Blue;
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.Write("@");
 
-            if (ifmap == true)
-            {
-                Draw_map();
-            }
+        
 
         }
+        public void MovePlayer(int x, int y)
+        {
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.Green;
+     
+           
+            playerX = x;
+            playerY = y;
+            Draw_map();
+
+        }
+        public void wasdMovement()
+        {
+            //create the key object
+            ConsoleKeyInfo cki;
+
+            cki = Console.ReadKey();
+            //check for wasd keypresses
+            if (cki.Key == ConsoleKey.W)
+            {
+                
+                MovePlayer(playerX, playerY - 1);
+
+
+            }
+            if (cki.Key == ConsoleKey.A)
+            {
+                MovePlayer(playerX - 1, playerY);
+            }
+            if (cki.Key == ConsoleKey.S)
+            {
+                MovePlayer(playerX, playerY + 1);
+
+            }
+            if (cki.Key == ConsoleKey.D)
+            {
+                MovePlayer(playerX + 1, playerY);
+            }
+        }
+
     }
 }
