@@ -4,20 +4,21 @@ namespace ascigame
 {
     class engine
     {
-        static int playerX = 5;
-        static int playerY = 5;
-        static bool ifmap = false;
-        static bool ifplayer = false;
-        static string maincolor;
-        static string map1;
-        static string map1stats;
-        static bool ifstartup = true;
-        static int columbs = 66;
-        static string[] map1infoarr = {"000", "000"};
-        static string[] map1Arr = { "000", "000" };
-        static int lines = 18;
-        static int Previouse_cursor_x;
-        static int Previouse_cursor_y;
+        public static int Points = 0;
+        public static int playerX = 5;
+        public static int playerY = 5;
+        public static bool ifmap = false;
+        public static bool ifplayer = false;
+        public static string maincolor;
+        public static string map1;
+        public static string map1stats;
+        public static bool ifstartup = true;
+        public static int columbs = 66;
+        public static string[] map1infoarr = {"000", "000"};
+        public static string[] map1Arr = { "000", "000" };
+        public static int lines = 18;
+        public static int Previouse_cursor_x;
+        public static int Previouse_cursor_y;
         public void startup()
         {
             
@@ -288,6 +289,36 @@ namespace ascigame
             if (cki.Key == ConsoleKey.D)
             {
                 MovePlayer(playerX + 1, playerY);
+            }
+        }
+        public void setPlayerCollisionControll(string type, int x, int y)
+        {
+            if (playerX == x && playerY == y)
+            {
+                if (type == "gameover")
+                {
+
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.Clear();
+
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(@"
+ _____                         ____                 
+/ ____|                       / __ \                
+| |  __  __ _ _ __ ___   ___  | |  | |_   _____ _ __ 
+| | |_ |/ _` | '_ ` _ \ / _ \ | |  | \ \ / / _ \ '__|
+| |__| | (_| | | | | | |  __/ | |__| |\ V /  __/ |   
+\_____|\__,_|_| |_| |_|\___|  \____/  \_/ \___|_|   ");
+
+                    Console.WriteLine("To Continue please use the move keys");
+                }
+
+
+
+                if (type == "Point")
+                {
+                    Points++;
+                }
             }
         }
 
